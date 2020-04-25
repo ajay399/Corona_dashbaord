@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css' rel='stylesheet' />
+    <style>
+
+        h2,h3{
+
+
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        *{
+            margin: 0;
+            padding: 0;
+        }
+
+        #map{
+            width: 100vw;
+            height: 100vh;
+        }
+        #ajaydev
+        {
+            
+            width: 100vw;
+            height: 10vh;
+            text-align:center;
+            background-color:#202131;
+            color:#fff;
+            font-size:20px;
+            display: table-cell;
+            vertical-align: middle;
+        
+        }
+        #ajaydev a{
+            text-decoration:none;
+            color:#fff;
+            margin-top:5px;
+        }
+    </style>
+    <title>Ajay Rabari | Corona Dashboard</title>
+</head>
+<body>
+    <div id='map'></div>
+    <div id="ajaydev">An Effort By <a href="https://in.linkedin.com/in/ajayrabari">Ajay Rabari</a></div>
+    
+</body>
+
+
+<script src='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js'></script>
+<script>
+  mapboxgl.accessToken = 'pk.eyJ1IjoiYWpheTM5OSIsImEiOiJjazhqbXp3eTYwYTVyM2VxcW82endraXA1In0.qM4t8cTsQ20BCD4P1epH5Q';
+  var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/dark-v10',
+    zoom: 1,
+    center: [0,20]
+  });
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+     $(document).ready(function(){
+
+        
+    $.ajax({
+       url: 'data.json',
+       dataType: 'json',
+       success: function(response) {
+            
+             color = "rgb(255, 0, 0)";
+
+             response.data.forEach(element => {
+
+                 var placename=element.name;
+                 var infectednumber=element.infected;
+                 var dead=element.dead;
+                 var recovered=element.recovered;
+
+
+                 var content='<h2>'+placename+'</h2><h3>- Infected : '+infectednumber+'</h3><h3>- Recovered : '+recovered+'</h3><h3>- Dead : '+dead+'</h3>';
+
+                 var popup = new mapboxgl.Popup({ offset: 25 }).setHTML(content);
+
+                latitude = element.latitude;
+                longitude = element.longitude;
+            
+                 
+                  new mapboxgl.Marker({
+                    draggable: false,
+                    color: color
+                    
+                }).setLngLat([longitude, latitude])
+                .setPopup(popup)
+                .addTo(map); 
+
+        
+
+            });
+             
+            
+
+       }
+
+
+       });
+    });
+
+    </script>
+
+</html>
